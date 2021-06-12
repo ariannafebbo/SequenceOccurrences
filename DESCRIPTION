@@ -1,0 +1,18 @@
+Package: SequenceOccurrences
+Type: Package
+Title: Counting sequence occurrences in arbitrary subsets of the genome
+Depends: GenomicRanges, GenomicFeatures, Biostrings, TxDb.Hsapiens.UCSC.hg38.knownGene, BSgenome.Hsapiens.UCSC.hg38, rmarkdown
+Imports: GenomicRanges, GenomicFeatures, Biostrings, TxDb.Hsapiens.UCSC.hg38.knownGene, BSgenome.Hsapiens.UCSC.hg38
+Version: 0.1.0
+Author: Arianna Febbo
+Maintainer: The package maintainer <arianna.febbo@mail.polimi.it>
+Description: This is a package that provides a function which takes
+        1) a reference genome;
+        2) a set of interesting genomic regions;
+        3) a list of short search sequences to be identified within the interesting genomic regions(exact matching);
+        and returns an overall count for each search sequence within the interesting genomic regions.
+License: MIT
+Encoding: UTF-8
+VignetteBuilder: knitr
+Suggests: BiocStyle, rmarkdown, knitr
+RoxygenNote: 7.1.1
