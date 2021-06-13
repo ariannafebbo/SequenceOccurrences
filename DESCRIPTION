@@ -2,7 +2,7 @@ Package: SequenceOccurrences
 Type: Package
 Title: Counting sequence occurrences in arbitrary subsets of a genome
 Depends: GenomicRanges, GenomicFeatures, Biostrings, rmarkdown
-Suggests: TxDb.Hsapiens.UCSC.hg38.knownGene, BSgenome 
+Suggests: TxDb.Hsapiens.UCSC.hg38.knownGene, BSgenome.Hsapiens.UCSC.hg38, BiocStyle, rmarkdown, knitr
 Version: 0.1.0
 Author: Arianna Febbo
 Maintainer: The package maintainer <arianna.febbo@mail.polimi.it>
@@ -14,5 +14,4 @@ Description: This is a package that provides a function which takes
 License: MIT
 Encoding: UTF-8
 VignetteBuilder: knitr
-Suggests: BiocStyle, rmarkdown, knitr
 RoxygenNote: 7.1.1
