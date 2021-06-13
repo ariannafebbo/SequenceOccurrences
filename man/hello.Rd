@@ -1,17 +1,50 @@
 \name{overall_count}
 \alias{overall_count}
-\title{COUNTING SEQUENCE OCCURRENCES IN ARBITRARY SUBSETS OF THE GENOME}
+\title{COUNTING SEQUENCE OCCURRENCES IN ARBITRARY SUBSETS OF A GENOME}
 \usage{
 overall_count(reference_genome, interesting_regions, search_patterns)
 }
 \description{
 It provides a function which takes
-1) a reference genome( e.g human hg38),
-2) a set of interesting genomic regions (e. g., 3'UTRs of coding genes),
-3) a list of short search sequences (e.g. iRNA binding seeds), to be identified within
+1) a reference genome(e.g., human hg38),
+2) a set of interesting genomic regions (e.g., 3'UTRs of coding genes),
+3) a list of short search sequences (e.g. miRNA binding seeds), to be identified within
     the interesting genomic regions (exact matching)
 and returns an overall count for each search sequence within the interesting genomic regions.
 }
 \examples{
-overall_count(Hsapiens, ThreeUTR_regions, miRNA_binding_seeds)
+#BiocManager::install("TxDb.Hsapiens.UCSC.hg38.knownGene")
+#BiocManager::install("BSgenome")
+library(TxDb.Hsapiens.UCSC.hg38.knownGene)
+library(BSgenome.Hsapiens.UCSC.hg38)
+##Retrieving TxDb object of Homo sapiens data from UCSC build hg38 based on the knownGene Track
+txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
+
+##extracting 3' UTR from TxDb object
+threeUTR <- threeUTRsByTranscript(txdb)
+
+####Retrieving 3 miRNA sequences (22nt) from miRBase database###
+
+##>hsa-let-7a-5p MIMAT0000062 Homo sapiens let-7a-5p
+##UGAGGUAGUAGGUUGUAUAGUU
+##selecting just the sequence from nt 2 to nt 7, which is the miRNA binding seed
+search_seq1 <- RNAString("GAGGUAG")
+
+##>hsa-miR-448 MIMAT0001532 Homo sapiens miR-448
+##UUGCAUAUGUAGGAUGUCCCAU
+search_seq2 <- RNAString("UGCAUAU")
+
+##>hsa-miR-429 MIMAT0001536 Homo sapiens miR-429
+##UAAUACUGUCUGGUAAAACCGU
+search_seq3 <- RNAString("AAUACUG")
+
+
+##OVERALL COUNT for each query sequence
+reference_genome <- Hsapiens #from BSgenome.Hsapiens.UCSC.hg38 package
+interesting_regions <- threeUTR
+##putting the 3 RNAstrings in a list
+search_patterns <- list(search_seq1, search_seq2, search_seq3)
+
+overall_count(reference_genome, interesting_regions, search_patterns)
+##[1] 4279 8255 8453
 }

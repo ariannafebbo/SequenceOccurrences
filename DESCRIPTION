@@ -1,8 +1,8 @@
 Package: SequenceOccurrences
 Type: Package
-Title: Counting sequence occurrences in arbitrary subsets of the genome
-Depends: GenomicRanges, GenomicFeatures, Biostrings, TxDb.Hsapiens.UCSC.hg38.knownGene, BSgenome.Hsapiens.UCSC.hg38, rmarkdown
-Imports: GenomicRanges, GenomicFeatures, Biostrings, TxDb.Hsapiens.UCSC.hg38.knownGene, BSgenome.Hsapiens.UCSC.hg38
+Title: Counting sequence occurrences in arbitrary subsets of a genome
+Depends: GenomicRanges, GenomicFeatures, Biostrings, rmarkdown
+Suggests: TxDb.Hsapiens.UCSC.hg38.knownGene, BSgenome 
 Version: 0.1.0
 Author: Arianna Febbo
 Maintainer: The package maintainer <arianna.febbo@mail.polimi.it>

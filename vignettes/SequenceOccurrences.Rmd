@@ -6,6 +6,8 @@ output: BiocStyle::html_document
 vignette: >
   %\VignetteIndexEntry{Counting sequence occurrences vignette}
   %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteKeywords{sequence, exact matching, counting sequence occurrences}
+  %\VignettePackage{SequenceOccurrences}
   %\VignetteEncoding{UTF-8}
 
 ---
@@ -14,22 +16,113 @@ vignette: >
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+## Introduction
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+The `r Biocpkg("Sequence occurrence")` package provides an helpful function for users that seek to find exact matching of query sequences within a genomic region of interest.
+The `r Biocpkg("Sequence occurrence")` package is available at [https://github.com/ariannafebbo/SequenceOccurrences] and can be installed via `install.packages("SequenceOccurrences)`.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+A package only needs to be installed once. Load the package into an R session with 
+```{r initialize, results="hide", warning=FALSE, message=FALSE}
+library(SequenceOccurrences)
 ```
 
-## Including Plots
+## *SequenceOccurrences*: Counting sequence occurrences in arbitrary subsets of a genome
+This package provides a function which takes as input
 
-You can also embed plots, for example:
+1.    a reference genome(e.g., human hg38),
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+2.    a set of interesting genomic regions (e.g., 3'UTRs of coding genes),
+
+3.    a list of short search sequences (e.g. miRNA binding seeds), to be identified within
+    the interesting genomic regions (exact matching,
+    
+and returns as output an overall count for each search sequence within the interesting genomic regions.
+
+
+The reference genome must be BSgenome object.
+
+The set of interesting genomic regions must be GRangesList object.
+
+The list of search sequences must be RNAstring or DNAstring object.
+
+
+## *SequenceOccurrences*: A meaningful example
+
+Choosing Homo Sapiens as my genome of interest.
+```{r example- SequenceOccurrences}
+#BiocManager::install("TxDb.Hsapiens.UCSC.hg38.knownGene")
+library(TxDb.Hsapiens.UCSC.hg38.knownGene)
+txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
+txdb
+```
+It retrieves the TxDb object of Homo sapiens data from UCSC build hg38 based on the knownGene Track.
+
+
+```{r}
+threeUTR <- threeUTRsByTranscript(txdb)
+threeUTR
+```
+3'UTR or 3' untranslated regions refers to the 3' side of mRNA which is located at the end of CDS(coding sequence of a gene) and it follows the translation stop codon.  
+The function `threeUTRsByTranscript(txdb)` extracts 3' UTR regions from TxDb object. 
+
+
+
+miRNAs were chosen as meaningful example of short search sequences because they are typically repressing gene expression by binding the 3'UTR, leading to mRNA degradation. 
+Mature miRNA sequences (22 nucleotides long) of Homo Sapiens were retrieved from miRBase database as Fasta format.
+
+The binding seed of miRNA goes from nucleotide 2 to nucleotide 7. 
+
+
+First sequence of miRNA:
+Hsa-let-7a-5p MIMAT0000062 Homo sapiens let-7a-5p: UGAGGUAGUAGGUUGUAUAGUU
+```{r}
+search_seq1 <- RNAString("GAGGUAG")
+search_seq1 
+```
+It converts the string from nt 2 to nt 7 into RNAString object.
+
+
+Second sequence of miRNA:
+Hsa-miR-448 MIMAT0001532 Homo sapiens miR-448: UUGCAUAUGUAGGAUGUCCCAU
+```{r}
+search_seq2 <- RNAString("UGCAUAU")
+search_seq2
+```
+It converts the string from nt 2 to nt 7 into RNAString object.
+
+
+Third sequence of miRNA:
+Hsa-miR-429 MIMAT0001536 Homo sapiens miR-429: UAAUACUGUCUGGUAAAACCGU
+```{r}
+search_seq3 <- RNAString("AAUACUG")
+search_seq3
+```
+It converts the string from nt 2 to nt 7 into RNAString object.
+
+
+```{r}
+#BiocManager::install("BSgenome")
+library(BSgenome.Hsapiens.UCSC.hg38)
+reference_genome <- Hsapiens 
+interesting_regions <- threeUTR
+search_patterns <- list(search_seq1, search_seq2, search_seq3)
+search_patterns
+```
+Retrieving Hsapiens genome from BSgenome.Hsapiens.UCSC.hg38 package.
+Setting the interesting regions as 3'UTR. 
+Putting the 3 RNAstrings in a list. 
+
+
+```{r}
+overall_count(reference_genome, interesting_regions, search_patterns)
+```
+Returns the overall count for each RNAstring contained in the list `search_patterns` within the `interesting_regions` of the reference genome `Hsapiens`.
+
+## Session Information
+
+All the output in this vignette was produced under the following conditions:
+
+```{r SessionInfo}
+sessionInfo()
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

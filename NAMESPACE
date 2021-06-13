@@ -1,2 +1,2 @@
 export('overall_count')
-import('GenomicRanges', 'GenomicFeatures', 'Biostrings', 'TxDb.Hsapiens.UCSC.hg38.knownGene', 'BSgenome.Hsapiens.UCSC.hg38', 'rmarkdown')
+import('GenomicRanges', 'GenomicFeatures', 'Biostrings', 'rmarkdown')
